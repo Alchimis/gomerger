@@ -127,8 +127,8 @@ func получитьКлючевоеНазваниеФайла(название
 	return строка{названиеФалаБезРасшиения[:индексПервогоЧислаВСтроке]}
 }
 
-func main() {
-	путьКПапке := строка{"путь к папке"}
+func bob(filePath string) {
+	путьКПапке := строка{string: filePath}
 	открытаяПапка, ошибка := открытьПапку(путьКПапке)
 	if ошибка != nil {
 		вывестиОшибку(ошибка)
@@ -162,8 +162,19 @@ func main() {
 			вывестиЧтоУгодно(ошибка)
 		} else {
 			for _, названиеФайла := range таблицаИмёнФайлов.Таблица[клбчь] {
-				os.Create(клбчь.string + "\\" + названиеФайла.string)
-				os.Rename(открытаяПапка.Name()+"\\"+названиеФайла.string, открытаяПапка.Name()+"\\"+клбчь.string+"\\"+названиеФайла.string)
+				oldpath := открытаяПапка.Name() + "\\" + названиеФайла.string
+				newpath := открытаяПапка.Name() + "\\" + клбчь.string + "\\" + названиеФайла.string
+				newfolder := открытаяПапка.Name() + "\\" + клбчь.string // клбчь.string + "\\" + названиеФайла.string
+				_, err := os.Create(newfolder)
+				if err != nil {
+					fmt.Println("can't create new folder: ", err)
+				}
+				err = os.Rename(oldpath, newpath)
+				if err != nil {
+					fmt.Println("can't move file: ", err)
+				} else {
+					fmt.Println("file ", названиеФайла.string, " moved to ", newpath, " from ", oldpath)
+				}
 			}
 		}
 	}
